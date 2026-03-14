@@ -1,4 +1,4 @@
-<!-- Updated: 2026-03-13 -->
+<!-- Updated: 2026-03-14 -->
 
 ![Claude Banana](screenshots/cover-image.jpeg)
 
@@ -9,7 +9,7 @@ AI image generation skill for Claude Code where **Claude acts as Creative Direct
 Unlike simple API wrappers, Claude interprets your intent, selects domain expertise, constructs optimized prompts using a 6-component Reasoning Brief system, and orchestrates Gemini for the best possible results.
 
 [![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-blue)](https://claude.ai/claude-code)
-[![Version](https://img.shields.io/badge/version-2.1.0-coral)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-coral)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 <details>
@@ -87,7 +87,7 @@ claude
 /banana inspire
 ```
 
-Claude will ask about your brand, select the right domain mode (Cinema, Product, Portrait, Editorial, UI, Logo, Landscape, Infographic), construct a detailed prompt with lighting and composition, set the right aspect ratio, and generate.
+Claude will ask about your brand, select the right domain mode (Cinema, Product, Portrait, Editorial, UI, Logo, Landscape, Infographic, Abstract), construct a detailed prompt with lighting and composition, set the right aspect ratio, and generate.
 
 ## Commands
 
@@ -100,6 +100,8 @@ Claude will ask about your brand, select the right domain mode (Cinema, Product,
 | `/banana inspire [category]` | Browse 2,500+ prompt database |
 | `/banana batch <idea> [N]` | Generate N variations (default: 3) |
 | `/banana setup` | Configure MCP and API key |
+| `/banana preset [list\|create\|show\|delete]` | Manage brand/style presets |
+| `/banana cost [summary\|today\|estimate]` | View cost tracking and estimates |
 
 ## How It Works
 
@@ -108,7 +110,7 @@ Claude will ask about your brand, select the right domain mode (Cinema, Product,
 ## What Makes This Different
 
 - **Intent Analysis** — Understands *what you actually need* (blog header? app icon? product shot?)
-- **Domain Expertise** — Selects the right creative lens (Cinema, Product, Portrait, Editorial, UI, Logo, Landscape, Infographic)
+- **Domain Expertise** — Selects the right creative lens (Cinema, Product, Portrait, Editorial, UI, Logo, Landscape, Infographic, Abstract)
 - **6-Component Reasoning Brief** — Constructs prompts with Subject + Action + Context + Composition + Lighting + Style
 - **Prompt Adaptation** — Translates patterns from a 2,500+ curated prompt database to Gemini's natural language format
 - **Post-Processing** — Crops, removes backgrounds, converts formats, resizes for platforms
@@ -148,6 +150,7 @@ Instead of sending "a cat in space" to Gemini, Claude constructs:
 | **Logo** | Branding, identity | "A minimalist logo for a tech startup" |
 | **Landscape** | Backgrounds, wallpapers | "A misty mountain sunrise for my desktop" |
 | **Infographic** | Data, diagrams | "Visualize our Q1 sales growth" |
+| **Abstract** | Generative art, textures | "Voronoi tessellation in neon gradients" |
 
 ## Models
 
@@ -160,15 +163,22 @@ Instead of sending "a cat in space" to Gemini, Claude constructs:
 
 ```
 ~/.claude/skills/banana/          # The skill (installed location)
-├── SKILL.md                           # Creative Director orchestration (v2.1)
+├── SKILL.md                           # Creative Director orchestration (v3.0)
 ├── references/
-│   ├── prompt-engineering.md          # 6-component system, domain modes, modifiers
+│   ├── prompt-engineering.md          # 6-component system, domain modes, safety rephrase
 │   ├── gemini-models.md               # Model specs, rate limits, capabilities
 │   ├── mcp-tools.md                   # MCP tool parameters and responses
-│   └── post-processing.md            # ImageMagick/FFmpeg pipeline recipes
+│   ├── post-processing.md            # ImageMagick/FFmpeg pipelines, green screen
+│   ├── cost-tracking.md              # Pricing table, usage guide
+│   └── presets.md                    # Brand preset schema and examples
 └── scripts/
     ├── setup_mcp.py                   # Configure MCP in Claude Code
-    └── validate_setup.py             # Verify installation
+    ├── validate_setup.py             # Verify installation
+    ├── generate.py                   # Direct API fallback — generation
+    ├── edit.py                       # Direct API fallback — editing
+    ├── cost_tracker.py               # Cost logging and summaries
+    ├── presets.py                    # Brand/style preset management
+    └── batch.py                     # CSV batch workflow parser
 ```
 
 ## Requirements

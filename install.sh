@@ -47,6 +47,10 @@ cp -r "$SOURCE_DIR"/* "$SKILL_DIR/"
 chmod +x "$SKILL_DIR/scripts/"*.py 2>/dev/null || true
 info "Skill installed to $SKILL_DIR"
 
+# Create data directory for cost tracking and presets
+mkdir -p "$HOME/.banana/presets"
+info "Created ~/.banana/ for cost tracking and presets"
+
 # Configure MCP if requested
 if [[ "${1:-}" == "--with-mcp" ]]; then
     API_KEY="${2:-}"

@@ -142,6 +142,42 @@ upscaling post-processing steps are no longer necessary. If your target platform
 images at or below 4K resolution, generate at native 4K instead of generating at 1K
 and upscaling. This produces better detail and avoids upscaling artifacts.
 
+## Green Screen Transparency Pipeline
+
+Gemini cannot generate transparent backgrounds. Use this workaround:
+
+### 1. Generate with green screen prompt
+
+Append to any prompt:
+```
+on a solid bright green (#00FF00) chroma key background
+with a thin white outline separating the subject from the background
+```
+
+### 2. Remove green screen (ImageMagick)
+
+```bash
+magick input.png -fuzz 20% -transparent "#00FF00" output.png
+```
+
+### 3. Clean edges + trim (ImageMagick)
+
+```bash
+magick output.png -channel A -blur 0x1 -level 50%,100% -trim +repage final.png
+```
+
+### 4. Alternative (FFmpeg, better for batch)
+
+```bash
+ffmpeg -i input.png -vf "colorkey=0x00FF00:0.3:0.1,despill=type=green" -pix_fmt rgba output.png
+```
+
+### Tips
+- `-fuzz 20%` handles slight color variations at edges; increase to 25% for softer edges
+- The white outline in the prompt helps prevent color spill on subject edges
+- For batch processing, the FFmpeg approach is faster and handles despill automatically
+- Always verify edges after conversion — may need manual touchup for hair/fur
+
 ## Quality Assessment
 
 ```bash

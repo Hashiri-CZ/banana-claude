@@ -3,8 +3,8 @@ name: banana
 description: >
   AI image generation, editing, and visual intelligence powered by Gemini
   Nano Banana models via MCP. Claude acts as Creative Director — interpreting
-  intent, selecting domain expertise (cinema, product, UI, logo, portrait,
-  editorial), constructing optimized 6-component prompts (Subject + Action +
+  intent, selecting domain expertise (cinema, product, portrait, editorial,
+  UI, logo, landscape, abstract, infographic), constructing optimized 6-component prompts (Subject + Action +
   Context + Composition + Lighting + Style), and orchestrating Gemini for
   best results. Supports generate, edit, multi-turn chat, transparency,
   post-processing, batch variations, and prompt inspiration from a 2,500+
@@ -20,11 +20,11 @@ allowed-tools:
   - Edit
   - Glob
   - Grep
-argument-hint: "[generate|edit|chat|inspire|batch|setup]"
+argument-hint: "[generate|edit|chat|inspire|batch|setup|preset|cost]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: 2.1.0
+  version: 3.0.0
   mcp-package: "@ycse/nanobanana-mcp"
 ---
 
@@ -45,6 +45,8 @@ construct an optimized prompt using the Reasoning Brief system below.
 | `/banana inspire [category]` | Browse prompt database for ideas |
 | `/banana batch <idea> [N]` | Generate N variations (default: 3) |
 | `/banana setup` | Install MCP server and configure API key |
+| `/banana preset [list\|create\|show\|delete]` | Manage brand/style presets |
+| `/banana cost [summary\|today\|estimate]` | View cost tracking and estimates |
 
 ## Core Principle: Claude as Creative Director
 
@@ -67,6 +69,15 @@ Determine what the user actually needs:
 
 If the request is vague (e.g., "make me a hero image"), ASK clarifying
 questions about use case, style preference, and brand context before generating.
+
+### Step 1.5: Check for Presets
+
+If the user mentions a brand name or style preset, check `~/.banana/presets/`:
+```bash
+python3 ${CLAUDE_SKILL_DIR}/scripts/presets.py list
+```
+If a matching preset exists, load it with `presets.py show NAME` and use its values
+as defaults for the Reasoning Brief. User instructions override preset values.
 
 ### Step 2: Select Domain Mode
 
@@ -167,7 +178,8 @@ Use the appropriate MCP tool:
 
 ### Step 6: Post-Processing (when needed)
 
-After generation, apply post-processing if the user needs it:
+After generation, apply post-processing if the user needs it.
+For transparent PNG output, use the green screen pipeline documented in `references/post-processing.md`.
 
 ```bash
 # Crop to exact dimensions
@@ -249,15 +261,22 @@ For `/banana batch <idea> [N]`, generate N variations:
 3. Call `gemini_generate_image` N times with distinct prompts
 4. Present all results with brief descriptions of what varies
 
-## Quality Presets
+For CSV-driven batch: `python3 ${CLAUDE_SKILL_DIR}/scripts/batch.py --csv path/to/file.csv`
+The script outputs a generation plan with cost estimates. Execute each row via MCP.
 
-If the user mentions speed or quality preference, adjust accordingly:
+## Model Routing
 
-| Preset | Model | Detail Level | Resolution | Best for |
-|--------|-------|-------------|:----------:|----------|
-| **Fast** | `gemini-3.1-flash-image-preview` | 4-component brief | `1K` | Quick concepts, iteration |
-| **Balanced** | `gemini-3.1-flash-image-preview` | Full 6-component brief | `2K` | Most use cases |
-| **Quality** | `gemini-3.1-flash-image-preview` | 6-component + camera specs + film stock | `4K` | Final assets |
+Select model based on task requirements:
+
+| Scenario | Model | Resolution | Brief Level | When |
+|----------|-------|-----------|-------------|------|
+| Quick draft | `gemini-2.5-flash-image` | 512/1K | 4-component | Rapid iteration, budget-conscious |
+| Standard | `gemini-3.1-flash-image-preview` | 1K/2K | Full 6-component | Default — most use cases |
+| Quality | `gemini-3.1-flash-image-preview` | 2K/4K | 6-component + camera/film stock | Final assets, hero images |
+| Text-heavy | `gemini-3.1-flash-image-preview` | 2K | 6-component, thinking: high | Logos, infographics, text rendering |
+| Batch/bulk | Any model via Batch API | 1K | 6-component | Non-urgent bulk — 50% cost discount |
+
+Default: `gemini-3.1-flash-image-preview`. Switch with `set_model` when routing to 2.5 Flash.
 
 ## Error Handling
 
@@ -266,11 +285,20 @@ If the user mentions speed or quality preference, adjust accordingly:
 | MCP not configured | Run `/banana setup` |
 | API key invalid | New key at https://aistudio.google.com/apikey |
 | Rate limited (429) | Wait 60s, retry. Free tier: ~10 RPM / ~500 RPD |
-| `IMAGE_SAFETY` | Output blocked by safety filter — rephrase prompt. Non-retryable as-is. |
-| `PROHIBITED_CONTENT` | Content policy violation — topic is blocked. Non-retryable. |
-| Safety filter blocked | Rephrase — avoid violence, NSFW, real public figures. Filters are known to be overly cautious — benign prompts may be blocked. Iterate. |
+| `IMAGE_SAFETY` | Output blocked — analyze prompt for triggers, suggest 2-3 rephrased alternatives. See `references/prompt-engineering.md` Safety Rephrase section. Do NOT auto-retry without user approval. |
+| `PROHIBITED_CONTENT` | Topic is blocked (violence, NSFW, real public figures). Non-retryable — explain why and suggest alternative concepts. |
+| Safety filter false positive | Filters are overly cautious. Rephrase using abstraction, artistic framing, or metaphor. Common: "dog" blocked → try "a friendly golden retriever in a sunny park". See `references/prompt-engineering.md` Safety Rephrase Strategies. |
+| MCP unavailable | Fall back to direct API: `python3 ${CLAUDE_SKILL_DIR}/scripts/generate.py --prompt "..." --aspect-ratio "16:9"` or `scripts/edit.py --image PATH --prompt "..."`. These call the Gemini REST API directly with no MCP dependency. |
 | Vague request | Ask clarifying questions before generating |
 | Poor result quality | Review Reasoning Brief — likely missing components |
+
+## Cost Tracking
+
+After every successful generation, log it:
+```bash
+python3 ${CLAUDE_SKILL_DIR}/scripts/cost_tracker.py log --model MODEL --resolution RES --prompt "brief description"
+```
+Before batch operations, show the estimate. Run `cost_tracker.py summary` if the user asks about usage.
 
 ## Response Format
 
@@ -286,7 +314,9 @@ Load on-demand — do NOT load all at startup:
 - `references/prompt-engineering.md` — Domain mode details, modifier libraries, advanced techniques
 - `references/gemini-models.md` — Model specs, rate limits, capabilities
 - `references/mcp-tools.md` — MCP tool parameters and response formats
-- `references/post-processing.md` — FFmpeg/ImageMagick pipeline recipes
+- `references/post-processing.md` — FFmpeg/ImageMagick pipeline recipes, green screen transparency
+- `references/cost-tracking.md` — Pricing table, usage guide, free tier limits
+- `references/presets.md` — Brand preset schema, examples, merge behavior
 
 ## Setup
 

@@ -36,8 +36,15 @@ jobs:
             banana/references/mcp-tools.md
             banana/references/post-processing.md
             banana/references/prompt-engineering.md
+            banana/references/cost-tracking.md
+            banana/references/presets.md
             banana/scripts/setup_mcp.py
             banana/scripts/validate_setup.py
+            banana/scripts/generate.py
+            banana/scripts/edit.py
+            banana/scripts/cost_tracker.py
+            banana/scripts/presets.py
+            banana/scripts/batch.py
             install.sh
           )
           for f in "${files[@]}"; do

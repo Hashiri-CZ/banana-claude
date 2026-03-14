@@ -32,7 +32,7 @@
 ## Deprecated Models (DO NOT USE)
 
 ### gemini-3-pro-image-preview
-- **Status:** Shut down March 9, 2026
+- **Status:** Base model deprecated March 9, 2026. **Image generation variant may still be accessible** — use at your own discretion via `set_model`. Prefer 3.1 Flash.
 - **Was:** Nano Banana Pro tier (professional asset production, 4K output, 14 reference images)
 - **Migration:** Use `gemini-3.1-flash-image-preview` instead
 
@@ -157,6 +157,7 @@ Useful for character consistency, style transfer, and brand-aligned generation.
 | Batch API | Any | 50% discount | Asynchronous, higher latency |
 
 Pricing is approximate and based on ~1,290 output tokens per image.
+Research suggests NB2 pricing may be ~$0.067/img (vs documented $0.039). Verify current pricing at https://ai.google.dev/gemini-api/docs/pricing
 
 ## Image Output Specs
 

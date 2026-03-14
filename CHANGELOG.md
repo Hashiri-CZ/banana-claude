@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-03-14
+
+### Added
+- **Multi-model routing** — task-based model selection table (draft/standard/quality/text-heavy/batch)
+- **Cost tracking** — `cost_tracker.py` with log, summary, today, estimate, and reset commands
+- **Direct API fallback** — `generate.py` and `edit.py` scripts for when MCP is unavailable (stdlib only)
+- **Brand/style presets** — `presets.py` for reusable brand identities (colors, style, typography, lighting, mood)
+- **CSV batch workflow** — `batch.py` parses CSV files into generation plans with cost estimates
+- **Green screen transparency pipeline** — workaround for Gemini's lack of transparent backgrounds
+- **Safety filter rephrase strategies** — 5 rephrase patterns, common trigger categories, example rephrases
+- Cost tracking reference (`references/cost-tracking.md`) with pricing table and free tier limits
+- Brand presets reference (`references/presets.md`) with schema, 3 example presets, merge behavior
+- Abstract domain mode added to README
+- Step 1.5 (Check for Presets) in Creative Director pipeline
+- `/banana preset` and `/banana cost` commands in Quick Reference
+- Expanded error handling for MCP unavailable and safety filter false positives
+
+### Changed
+- Quality Presets section replaced with Model Routing table
+- Pro model status updated: may still be accessible for image generation
+- Pricing note: research suggests NB2 pricing may be ~$0.067/img
+- Architecture diagram updated to show all 7 scripts and 6 references
+- install.sh creates `~/.banana/` directory for cost tracking and presets
+
+### Removed
+- Legacy `nano-banana/scripts/__pycache__/` (orphaned .pyc files)
+
 ## [2.1.0] - 2026-03-13
 
 ### Added
@@ -39,5 +66,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Batch variations, multi-turn chat, prompt inspiration
 - Install script with validation
 
+[3.0.0]: https://github.com/AgriciDaniel/claude-banana/releases/tag/v3.0.0
 [2.1.0]: https://github.com/AgriciDaniel/claude-banana/releases/tag/v2.1.0
 [2.0.0]: https://github.com/AgriciDaniel/claude-banana/releases/tag/v2.0.0
