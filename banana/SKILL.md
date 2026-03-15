@@ -2,13 +2,9 @@
 name: banana
 description: >
   AI image generation, editing, and visual intelligence powered by Gemini
-  Nano Banana models via MCP. Claude acts as Creative Director — interpreting
-  intent, selecting domain expertise (cinema, product, portrait, editorial,
-  UI, logo, landscape, abstract, infographic), constructing optimized 6-component prompts (Subject + Action +
-  Context + Composition + Lighting + Style), and orchestrating Gemini for
-  best results. Supports generate, edit, multi-turn chat, transparency,
-  post-processing, batch variations, and prompt inspiration from a 2,500+
-  curated prompt database. Triggers on: "generate image", "create image",
+  Nano Banana models via MCP. Claude acts as Creative Director — analyzing
+  intent, selecting domain expertise, and constructing optimized 6-component
+  prompts for best results. Triggers on: "generate image", "create image",
   "edit image", "banana", "image generation", "picture", "illustration",
   "visual", "modify image", "draw", "make an image", "hero image",
   "thumbnail", "logo", "icon", "banner", "mockup", "product shot",
@@ -104,11 +100,12 @@ never abstract or conceptual. Describe what the camera sees, not what the ad mea
 
 | Component | Weight | Include |
 |-----------|--------|---------|
-| **Subject** | 40% | Age, skin tone, hair, eyes, expression, physical micro-details |
-| **Styling** | 25% | Brand names, textures (crinkle, metallic, silk), fit, accessories |
-| **Environment** | 15% | Specific location + time + weather + contextual objects |
-| **Camera** | 10% | Real camera model + exact lens + f-stop + shot type |
+| **Subject** | 30% | Age, skin tone, hair, eyes, expression, physical micro-details |
+| **Action** | 10% | Movement, pose, gesture, interaction, state of being |
+| **Context** | 15% | Specific location + time + weather + contextual objects |
+| **Composition** | 10% | Shot type, camera angle, framing, focal length, f-stop |
 | **Lighting** | 10% | Direction, quality, color temp, named setup (Rembrandt, rim) |
+| **Style** | 25% | Brand names, textures, art medium, camera model, color grading |
 
 **CRITICAL RULES:**
 - Name real cameras: "Sony A7R IV", "Canon EOS R5", "iPhone 16 Pro Max"
@@ -204,6 +201,12 @@ Use the appropriate MCP tool:
 After generation, apply post-processing if the user needs it.
 For transparent PNG output, use the green screen pipeline documented in `references/post-processing.md`.
 
+**Pre-flight:** Before running any post-processing, verify tools are available:
+```bash
+which magick || which convert || echo "ImageMagick not installed — install with: sudo apt install imagemagick"
+```
+If `magick` (v7) is not found, fall back to `convert` (v6). If neither exists, inform the user.
+
 ```bash
 # Crop to exact dimensions
 magick input.png -resize 1200x630^ -gravity center -extent 1200x630 output.png
@@ -252,13 +255,11 @@ Use `gemini_chat` for iterative creative sessions:
 
 ## Prompt Inspiration (`/banana inspire`)
 
-Search the curated prompt database for inspiration:
+If the user has the `prompt-engine` or `prompt-library` skill installed, use it
+to search 2,500+ curated prompts. Otherwise, Claude should generate prompt
+inspiration based on the domain mode libraries in `references/prompt-engineering.md`.
 
-```bash
-python3 ~/Desktop/claude-prompt/claude-prompts-clone/scripts/search_prompts.py "[query]"
-```
-
-Available filters:
+**When using an external prompt database**, available filters include:
 - `--category [name]` — 19 categories (fashion-editorial, sci-fi, logos-icons, etc.)
 - `--model [name]` — Filter by original model (adapt to Gemini)
 - `--type image` — Image prompts only
@@ -311,7 +312,7 @@ Default: `gemini-3.1-flash-image-preview`. Switch with `set_model` when routing 
 | `IMAGE_SAFETY` | Output blocked — analyze prompt for triggers, suggest 2-3 rephrased alternatives. See `references/prompt-engineering.md` Safety Rephrase section. Do NOT auto-retry without user approval. |
 | `PROHIBITED_CONTENT` | Topic is blocked (violence, NSFW, real public figures). Non-retryable — explain why and suggest alternative concepts. |
 | Safety filter false positive | Filters are overly cautious. Rephrase using abstraction, artistic framing, or metaphor. Common: "dog" blocked → try "a friendly golden retriever in a sunny park". See `references/prompt-engineering.md` Safety Rephrase Strategies. |
-| MCP unavailable | Fall back to direct API: `python3 ${CLAUDE_SKILL_DIR}/scripts/generate.py --prompt "..." --aspect-ratio "16:9"` or `scripts/edit.py --image PATH --prompt "..."`. These call the Gemini REST API directly with no MCP dependency. |
+| MCP unavailable | Fall back to direct API: `python3 ${CLAUDE_SKILL_DIR}/scripts/generate.py --prompt "..." --aspect-ratio "16:9"` or `python3 ${CLAUDE_SKILL_DIR}/scripts/edit.py --image PATH --prompt "..."`. These call the Gemini REST API directly with no MCP dependency. |
 | Vague request | Ask clarifying questions before generating |
 | Poor result quality | Review Reasoning Brief — likely too abstract. Load `references/prompt-engineering.md` Proven Templates and rebuild with specifics. |
 

@@ -32,7 +32,7 @@ def check(label: str, passed: bool, detail: str = "") -> bool:
 
 
 def main() -> int:
-    print("Claude Banana Pro 2 — Setup Validation")
+    print("Claude Banana — Setup Validation")
     print("=" * 40)
     results = []
 

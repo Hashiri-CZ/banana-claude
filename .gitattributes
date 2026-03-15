@@ -2,4 +2,6 @@
 *.md linguist-documentation
 *.json linguist-data
 screenshots/* linguist-generated
-scripts/*.py linguist-vendored
+*.jpeg binary
+*.jpg binary
+*.png binary

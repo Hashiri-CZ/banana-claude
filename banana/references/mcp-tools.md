@@ -72,6 +72,7 @@ Switch the active Gemini model.
 **Available models:**
 - `gemini-3.1-flash-image-preview` (default, recommended)
 - `gemini-2.5-flash-image` (stable fallback)
+- `gemini-3-pro-image-preview` (Nano Banana Pro — highest quality, text rendering)
 
 ### get_image_history
 Retrieve list of images generated in the current session.

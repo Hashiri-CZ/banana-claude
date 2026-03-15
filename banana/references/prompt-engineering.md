@@ -211,11 +211,12 @@ to Gemini's natural language format:
 
 | Component | Weight | What to include |
 |-----------|--------|-----------------|
-| **Subject** | 40% | Age, skin tone, hair color/style, eye color, body type, expression |
-| **Styling** | 25% | Brand names, textures, fit, accessories, colors |
-| **Environment** | 15% | Location + time of day + context details |
-| **Camera** | 10% | Camera model + lens + focal length + shot type |
+| **Subject** | 30% | Age, skin tone, hair color/style, eye color, body type, expression |
+| **Action** | 10% | Movement, pose, gesture, interaction, state of being |
+| **Context** | 15% | Location + time of day + weather + context details |
+| **Composition** | 10% | Shot type, camera angle, framing, focal length, f-stop |
 | **Lighting** | 10% | Quality, direction, color temperature, shadows |
+| **Style** | 25% | Art medium, brand names, textures, camera model, color grading |
 
 ### Instagram Ad / Social Media
 

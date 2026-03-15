@@ -29,12 +29,17 @@
 | **Rate Limits (Free)** | ~10 RPM / ~500 RPD |
 | **Best For** | Stable fallback, proven quality |
 
-## Deprecated Models (DO NOT USE)
-
 ### gemini-3-pro-image-preview
-- **Status:** Base model deprecated March 9, 2026. **Image generation variant may still be accessible** — use at your own discretion via `set_model`. Prefer 3.1 Flash.
-- **Was:** Nano Banana Pro tier (professional asset production, 4K output, 14 reference images)
-- **Migration:** Use `gemini-3.1-flash-image-preview` instead
+| Property | Value |
+|----------|-------|
+| **Model ID** | `gemini-3-pro-image-preview` |
+| **Tier** | Nano Banana Pro |
+| **Status** | Active (Preview) — base text model deprecated March 9, 2026 but image variant remains active |
+| **Speed** | Moderate — higher latency than Flash |
+| **Cost** | ~$0.134/image at 1K |
+| **Best For** | Professional assets, text-heavy images (94% text accuracy), highest quality |
+
+## Deprecated Models (DO NOT USE)
 
 ### gemini-2.0-flash-exp
 - **Status:** Deprecated, replaced by gemini-2.5-flash-image
@@ -142,22 +147,23 @@ Useful for character consistency, style transfer, and brand-aligned generation.
 
 | Tier | RPM | RPD | Notes |
 |------|-----|-----|-------|
-| Free | ~10 | ~500 | Per Google Cloud project, resets midnight Pacific. Reduced Dec 2025. |
-| Pay-as-you-go | 30 | 10,000 | Production workloads |
+| Free | ~5-15 | ~20-500 | Per project, resets midnight Pacific. Cut ~92% in Dec 2025. |
+| Tier 1 (billing enabled) | 150-300 | 1,500-10,000 | Production workloads |
+| Tier 2 ($250+ spend) | 1,000+ | Unlimited | High-volume |
 | Enterprise | Custom | Custom | Contact Google |
 
 ## Pricing
 
 | Model | Resolution | Cost per Image | Notes |
 |-------|-----------|---------------|-------|
-| 3.1 Flash | 1K | ~$0.039 | Standard |
-| 3.1 Flash | 2K | ~$0.078 | 2× standard |
-| 3.1 Flash | 4K | ~$0.156 | 4× standard |
-| 2.5 Flash | 1K | ~$0.039 | Standard |
+| 3.1 Flash | 1K | ~$0.067 | Standard |
+| 3.1 Flash | 2K | ~$0.134 | 2x standard |
+| 3.1 Flash | 4K | ~$0.268 | 4x standard |
+| Pro | 1K | ~$0.134 | Professional quality |
+| 2.5 Flash | 1K | ~$0.039 | Previous gen |
 | Batch API | Any | 50% discount | Asynchronous, higher latency |
 
 Pricing is approximate and based on ~1,290 output tokens per image.
-Research suggests NB2 pricing may be ~$0.067/img (vs documented $0.039). Verify current pricing at https://ai.google.dev/gemini-api/docs/pricing
 
 ## Image Output Specs
 

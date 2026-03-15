@@ -51,6 +51,13 @@ jobs:
             test -f "${f}" && echo "OK: ${f}" || { echo "::error::Missing ${f}"; exit 1; }
           done
 
+      - name: Check Python syntax
+        shell: bash
+        run: |
+          for f in banana/scripts/*.py; do
+            python3 -m py_compile "$f" && echo "OK: $f" || { echo "::error::Syntax error in $f"; exit 1; }
+          done
+
       - name: Check for outdated rate limits
         shell: bash
         run: |

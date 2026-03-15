@@ -138,6 +138,7 @@ def main():
     p_create.add_argument("--description", default="", help="Brief preset description")
     p_create.add_argument("--ratio", default="16:9", help="Default aspect ratio")
     p_create.add_argument("--resolution", default="2K", help="Default resolution")
+    p_create.add_argument("--force", action="store_true", help="Overwrite existing preset")
 
     # delete
     p_delete = sub.add_parser("delete", help="Delete a preset")
