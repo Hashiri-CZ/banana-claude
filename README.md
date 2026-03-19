@@ -1,4 +1,4 @@
-<!-- Updated: 2026-03-14 -->
+<!-- Updated: 2026-03-19 -->
 
 ![Claude Banana](screenshots/cover-image.jpeg)
 
@@ -6,10 +6,10 @@
 
 AI image generation skill for Claude Code where **Claude acts as Creative Director** using Google's Gemini Nano Banana models.
 
-Unlike simple API wrappers, Claude interprets your intent, selects domain expertise, constructs optimized prompts using a 6-component Reasoning Brief system, and orchestrates Gemini for the best possible results.
+Unlike simple API wrappers, Claude interprets your intent, selects domain expertise, constructs optimized prompts using Google's official 5-component formula, and orchestrates Gemini for the best possible results.
 
 [![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-blue)](https://claude.ai/claude-code)
-[![Version](https://img.shields.io/badge/version-3.0.0-coral)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.0.0-coral)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 <details>
@@ -20,7 +20,7 @@ Unlike simple API wrappers, Claude interprets your intent, selects domain expert
 - [Commands](#commands)
 - [How It Works](#how-it-works)
 - [What Makes This Different](#what-makes-this-different)
-- [The 6-Component Reasoning Brief](#the-6-component-reasoning-brief)
+- [The 5-Component Prompt Formula](#the-5-component-prompt-formula)
 - [Domain Modes](#domain-modes)
 - [Models](#models)
 - [Architecture](#architecture)
@@ -111,7 +111,7 @@ Claude will ask about your brand, select the right domain mode (Cinema, Product,
 
 - **Intent Analysis** — Understands *what you actually need* (blog header? app icon? product shot?)
 - **Domain Expertise** — Selects the right creative lens (Cinema, Product, Portrait, Editorial, UI, Logo, Landscape, Infographic, Abstract)
-- **6-Component Reasoning Brief** — Constructs prompts with Subject + Action + Context + Composition + Lighting + Style
+- **5-Component Prompt Formula** — Constructs prompts with Subject + Action + Location/Context + Composition + Style (includes lighting)
 - **Prompt Adaptation** — Translates patterns from a 2,500+ curated prompt database to Gemini's natural language format
 - **Post-Processing** — Crops, removes backgrounds, converts formats, resizes for platforms
 - **Batch Variations** — Generates N variations rotating different components
@@ -119,22 +119,23 @@ Claude will ask about your brand, select the right domain mode (Cinema, Product,
 - **4K Resolution Output** — Up to 4096×4096 with `imageSize` control
 - **14 Aspect Ratios** — Including ultra-wide 21:9 for cinematic compositions
 
-## The 6-Component Reasoning Brief
+## The 5-Component Prompt Formula
 
-![6-Component Reasoning Brief](screenshots/reasoning-brief.jpeg)
+![Prompt Formula](screenshots/reasoning-brief.jpeg)
 
 Instead of sending "a cat in space" to Gemini, Claude constructs:
 
-> A photorealistic medium shot of a tabby cat floating weightlessly inside
-> the cupola module of the International Space Station, paws outstretched
-> toward a floating droplet of water, Earth visible through the circular
-> windows behind. Soft directional light from the windows illuminates the
-> cat's fur with a blue-white rim light, while the interior has warm amber
-> instrument panel glow. Captured with a Canon EOS R5, 35mm f/2.0 lens,
-> slight barrel distortion emphasizing the curved module interior. Clean,
-> sharp detail reminiscent of NASA documentary photography.
+> A medium shot of a tabby cat floating weightlessly inside the cupola module
+> of the International Space Station, paws outstretched toward a floating
+> droplet of water, Earth visible through the circular windows behind. Soft
+> directional light from the windows illuminates the cat's fur with a
+> blue-white rim light, while the interior has warm amber instrument panel
+> glow. Captured with a Canon EOS R5, 35mm f/2.0 lens, slight barrel
+> distortion emphasizing the curved module interior. In the style of a
+> National Geographic cover story on the ISS, with the sharp documentary
+> clarity of NASA mission photography.
 
-**Components used:** Subject (tabby cat, physical detail) → Action (floating, paw gesture) → Context (ISS cupola, Earth visible) → Composition (medium shot, curved framing) → Lighting (directional window + amber instruments) → Style (Canon R5, NASA documentary)
+**Components used:** Subject (tabby cat, physical detail) → Action (floating, paw gesture) → Location/Context (ISS cupola, Earth visible) → Composition (medium shot, curved framing) → Style (Canon R5, National Geographic documentary, directional window light + amber instruments)
 
 ## Domain Modes
 
@@ -163,9 +164,9 @@ Instead of sending "a cat in space" to Gemini, Claude constructs:
 
 ```
 ~/.claude/skills/banana/          # The skill (installed location)
-├── SKILL.md                           # Creative Director orchestration (v3.0)
+├── SKILL.md                           # Creative Director orchestration (v4.0)
 ├── references/
-│   ├── prompt-engineering.md          # 6-component system, domain modes, safety rephrase
+│   ├── prompt-engineering.md          # 5-component formula, banned keywords, safety rephrase
 │   ├── gemini-models.md               # Model specs, rate limits, capabilities
 │   ├── mcp-tools.md                   # MCP tool parameters and responses
 │   ├── post-processing.md            # ImageMagick/FFmpeg pipelines, green screen
@@ -185,7 +186,7 @@ Instead of sending "a cat in space" to Gemini, Claude constructs:
 
 - [Claude Code](https://github.com/anthropics/claude-code)
 - Node.js 18+ (for npx)
-- Google AI API key (free tier: ~10 RPM / ~500 RPD)
+- Google AI API key (free tier: ~5-15 RPM / ~20-500 RPD, cut ~92% Dec 2025)
 - ImageMagick (optional, for post-processing)
 
 ## Uninstall

@@ -170,8 +170,8 @@ Choose output resolution based on intended use:
 | `imageSize` | When to use |
 |-------------|-------------|
 | `512` | Quick drafts, rapid iteration |
-| `1K` | Default — web, social media, most use cases |
-| `2K` | Quality assets, detailed illustrations |
+| `1K` | Budget-conscious, web thumbnails, social media |
+| `2K` | **Default** — quality assets, most use cases |
 | `4K` | Print production, hero images, final deliverables |
 
 Note: Resolution control (`imageSize`) depends on MCP package version support.

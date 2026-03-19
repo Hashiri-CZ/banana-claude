@@ -107,7 +107,7 @@ Control output resolution with the `imageSize` parameter. Note the **UPPERCASE**
 **Notes:**
 - Actual pixel dimensions depend on aspect ratio (e.g., 4K at 16:9 = 4096×2304)
 - Higher resolutions consume more tokens and cost more
-- Default is `1K` if `imageSize` is not specified
+- The API default is `1K` if `imageSize` is omitted. The banana skill defaults to `2K` — always pass `imageSize` explicitly
 - `imageSize` value MUST be uppercase — `"2k"` will be silently ignored
 
 ## API Configuration
