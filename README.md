@@ -1,4 +1,4 @@
-<!-- Updated: 2026-03-19 -->
+<!-- Updated: 2026-03-19v2 -->
 
 ![Banana Claude](screenshots/cover-image.png)
 
